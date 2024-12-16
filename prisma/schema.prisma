@@ -13,7 +13,7 @@ enum UserRole {
     XVARIATE_TEAM
     CLIENT
     FREELANCER
-    AMBASASSADOR
+    AMBASSADOR
 }
 
 model User {
