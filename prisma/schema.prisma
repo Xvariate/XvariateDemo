@@ -9,12 +9,20 @@ generator client {
     previewFeatures = ["driverAdapters"]
 }
 
+enum UserRole {
+    XVARIATE_TEAM
+    CLIENT
+    FREELANCER
+    AMBASASSADOR
+}
+
 model User {
     id            String    @id @default(cuid())
     name          String?
     email         String    @unique
     emailVerified DateTime?
-    password  String?
+    role          UserRole
+    password      String?
     image         String?
     accounts      Account[]
     createdAt     DateTime  @default(now())
