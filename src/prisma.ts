@@ -1,9 +1,9 @@
-import { Pool } from "@neondatabase/serverless";
+import { Pool, neonConfig } from "@neondatabase/serverless";
 import { PrismaNeon } from "@prisma/adapter-neon";
 import { PrismaClient } from "@prisma/client";
 
 // Enable optimized fetching for Neon
-//neonConfig.poolQueryViaFetch = true;
+neonConfig.poolQueryViaFetch = true;
 // This tells Neon to use the `fetch` API for making queries in a serverless environment,
 // improving performance and reducing connection overhead.
 
@@ -15,7 +15,7 @@ const prismaClientSingleton = () => {
     //* Create an adapter to bridge Prisma and Neo
     const adapter = new PrismaNeon(neon);
 
-     // Return a PrismaClient instance configured with the Neon adapter
+    // Return a PrismaClient instance configured with the Neon adapter
     return new PrismaClient({ adapter });
 };
 
