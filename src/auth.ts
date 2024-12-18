@@ -1,9 +1,10 @@
-import NextAuth from "next-auth"
-import { PrismaAdapter } from "@auth/prisma-adapter"
-import prisma from "@/prisma"
-import Credentials from "next-auth/providers/credentials"
-import * as z from "zod"
-import bcrypt from "bcryptjs"
+import NextAuth from "next-auth";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import prisma from "@/prisma";
+import Credentials from "next-auth/providers/credentials";
+import Google from "next-auth/providers/google"
+import * as z from "zod";
+import bcrypt from "bcryptjs";
 
 const SignInSchema = z.object({
     email: z.string().email({ message: "Email is required" }),
@@ -13,13 +14,20 @@ const SignInSchema = z.object({
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
     adapter: PrismaAdapter(prisma),
+    session: {
+        strategy: "jwt",
+    },
     callbacks: {
-        
+
     },
     events: {
-        
+
     },
     providers: [
+        Google({
+            clientId: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET
+        }),
         Credentials({
             async authorize(credentials) {
                 const validatedFields = SignInSchema.safeParse(credentials)
