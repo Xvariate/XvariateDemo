@@ -3,7 +3,7 @@ import { PrismaNeon } from "@prisma/adapter-neon";
 import { PrismaClient } from "@prisma/client";
 
 // Enable optimized fetching for Neon
-neonConfig.poolQueryViaFetch = true;
+//neonConfig.poolQueryViaFetch = true;
 // This tells Neon to use the `fetch` API for making queries in a serverless environment,
 // improving performance and reducing connection overhead.
 
