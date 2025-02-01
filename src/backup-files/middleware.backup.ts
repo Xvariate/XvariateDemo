@@ -1,10 +1,7 @@
+import { auth } from "@/auth";
 import { DEFAULT_LOGIN_REDIRECT, authRoutes, publicRoutes, HOME_ROUTE, apiAuthPrefix } from "@/routes"
 import { UserRole } from "@prisma/client";
 import { NextResponse } from "next/server";
-import authConfig from "./auth.config";
-import NextAuth from "next-auth";
-const { auth } = NextAuth(authConfig);
-
 
 
 //* Define which roles can access each dashboard path
