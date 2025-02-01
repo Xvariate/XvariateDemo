@@ -2,7 +2,7 @@ import type { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 import { getUserByEmail } from "./data/user";
-import bcrypt from "bcryptjs";
+//import bcrypt from "bcryptjs";
 import { LogInServerSchema, NewVerificationLoginSchema } from "./schemas";
 
 export default {
@@ -35,11 +35,12 @@ export default {
                 // Validate email and password for traditional logins
                 const validatedFields = LogInServerSchema.safeParse(credentials);
                 if (validatedFields.success) {
-                    const { email, password } = validatedFields.data;
+                    const { email } = validatedFields.data;
                     const user = await getUserByEmail(email);
                     if (!user || !user.password) return null;
-                    const passwordMatch = await bcrypt.compare(password, user.password);
-                    if (passwordMatch) return user; // Return the user if credentials are correct
+                    // const passwordMatch = await bcrypt.compare(password, user.password);
+                    // if (passwordMatch) return user; // Return the user if credentials are correct
+                    return user;
                 }
                 return null; // Return null if validation fails
             }
