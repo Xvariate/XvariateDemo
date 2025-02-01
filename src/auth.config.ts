@@ -1,7 +1,7 @@
 import type { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
-import { getUserByEmail } from "./data/user";
+//import { getUserByEmail } from "./data/user";
 //import bcrypt from "bcryptjs";
 import { LogInServerSchema, NewVerificationLoginSchema } from "./schemas";
 
@@ -23,24 +23,26 @@ export default {
                             return null; // Return null if passwordless secret is missing
                         }
 
-                        const { email, newVerificationSecret } = validateNewVerificationFields.data;
-                        if (newVerificationSecret === envNewVerificationSecret) {
-                            const user = await getUserByEmail(email);
-                            if (!user || !user.password) return null;
-                            return user; // Return the user if valid
-                        }
+                        //const { email, newVerificationSecret } = validateNewVerificationFields.data;
+                        // if (newVerificationSecret === envNewVerificationSecret) {
+                        //     const user = await getUserByEmail(email);
+                        //     if (!user || !user.password) return null;
+                        //     return user; // Return the user if valid
+                        // }
+                        return null
                     }
                 }
 
                 // Validate email and password for traditional logins
                 const validatedFields = LogInServerSchema.safeParse(credentials);
                 if (validatedFields.success) {
-                    const { email } = validatedFields.data;
-                    const user = await getUserByEmail(email);
-                    if (!user || !user.password) return null;
-                    // const passwordMatch = await bcrypt.compare(password, user.password);
-                    // if (passwordMatch) return user; // Return the user if credentials are correct
-                    return user;
+                    // const { email } = validatedFields.data;
+                    // const user = await getUserByEmail(email);
+                    // if (!user || !user.password) return null;
+                    // // const passwordMatch = await bcrypt.compare(password, user.password);
+                    // // if (passwordMatch) return user; // Return the user if credentials are correct
+                    // return user;
+                    return null
                 }
                 return null; // Return null if validation fails
             }
