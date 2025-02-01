@@ -1,4 +1,4 @@
-// Import the Prisma client for interacting with the database
+import { extractErrorMessage } from "@/lib/helpers";
 import prisma from "@/prisma";
 // Import the `cache` utility from React to enable caching of function results
 import { cache } from "react";
@@ -13,9 +13,15 @@ export const getCachedUserByEmail = cache(
                 }
             })
 
-            return existingUser;
-        } catch {
-            return null;
+            return existingUser; // Return the user if found
+        } catch (error) {
+            console.error("getCachedUserByEmail Error:", error);
+            const message = extractErrorMessage(
+                {
+                    error,
+                    defaultMessage: "Internal Server Error: Unable to fetch user data."
+                });
+            throw new Error(message);
         }
     }
 )
@@ -47,9 +53,14 @@ export const getUserByEmail = async (email: string) => {
             }
         })
 
-        return existingUser;
-    } catch {
-        return null;
+        return existingUser; // Return the user if found
+    } catch (error) {
+        const message = extractErrorMessage(
+            {
+                error,
+                defaultMessage: "Internal Server Error: Unable to fetch user data."
+            });
+        throw new Error(message);
     }
 }
 

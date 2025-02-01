@@ -10,6 +10,9 @@ export default {
 	],
 	theme: {
 		extend: {
+			screens: {
+				"minxl": "1080px",
+			},
 			colors: {
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
@@ -56,7 +59,11 @@ export default {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)'
-			}
+			},
+			fontFamily: {
+				'geist-sans': ['var(--font-geist-sans)', 'sans-serif'],
+				'geist-mono': ['var(--font-geist-mono)', 'monospace'],
+			},
 		}
 	},
 	plugins: [tailwindcssAnimate],

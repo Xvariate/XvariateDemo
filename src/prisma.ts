@@ -2,17 +2,16 @@ import { Pool, neonConfig } from "@neondatabase/serverless";
 import { PrismaNeon } from "@prisma/adapter-neon";
 import { PrismaClient } from "@prisma/client";
 
-// Enable optimized fetching for Neon
+// Enable optimized fetching for Neon using the `fetch` API
+// This improves performance and reduces connection overhead in serverless environments
 neonConfig.poolQueryViaFetch = true;
-// This tells Neon to use the `fetch` API for making queries in a serverless environment,
-// improving performance and reducing connection overhead.
 
 // Function to initialize a Prisma Client instance with the Neon adapter
 const prismaClientSingleton = () => {
-    //* Create a new Neon connection pool using the database URL from environment variables
+    // Create a Neon connection pool using the database URL from environment variables
     const neon = new Pool({ connectionString: process.env.DATABASE_URL });
 
-    //* Create an adapter to bridge Prisma and Neo
+    // Create an adapter to bridge Prisma and Neon
     const adapter = new PrismaNeon(neon);
 
     // Return a PrismaClient instance configured with the Neon adapter
@@ -31,8 +30,5 @@ const prisma = globalThis.prismaGlobal ?? prismaClientSingleton();
 // Export the Prisma client instance for use in other parts of the application
 export default prisma;
 
-// During development, persist the Prisma instance in the global object
+// In development, store the Prisma client in the global object to avoid multiple instances
 if (process.env.NODE_ENV !== "production") globalThis.prismaGlobal = prisma;
-// In non-production environments (like development),
-// we store the Prisma client in `globalThis.prismaGlobal` to avoid creating multiple instances.
-// This is crucial for serverless environments to prevent connection issues or performance degradation.

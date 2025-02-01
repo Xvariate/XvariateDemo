@@ -15,7 +15,7 @@ export function AppProviders({ children, session }: AppProvidersProps) {
     // Wrap the application with the SessionProvider to handle user authentication state
     <SessionProvider session={session}>
       {/* Wrap the application with the NextThemesProvider to handle theming */}
-      <NextThemesProvider attribute="class" defaultTheme="system" enableSystem>
+      <NextThemesProvider attribute="class" defaultTheme="dark" enableSystem>
         {children}
       </NextThemesProvider>
     </SessionProvider>
