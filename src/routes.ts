@@ -3,7 +3,6 @@ import { UserRole } from "@prisma/client";
 // Array of routes that is accessible to public. This routes do not need authentication
 export const HOME_ROUTE: string = "/";
 export const publicRoutes: string[] = [
-    "/",
     "/new-verification",
     "/services",
     "/contact",

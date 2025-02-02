@@ -37,9 +37,9 @@ export async function newVerificationAction(token: string) {
     })
 
     // Verify that a passwordless secret is set
-    const newVerificationSecret = process.env.NEW_VERIFICATION_SECRET;
+    const credentialProvderSecret = process.env.CREDENTIAL_PROVIDER_SECRET;
     const serverSecret = process.env.SERVER_SECRET;
-    if (!newVerificationSecret) {
+    if (!credentialProvderSecret) {
         return { error: "Passwordless secret is missing." };
     }
 
@@ -53,8 +53,17 @@ export async function newVerificationAction(token: string) {
     try {
         await signIn("credentials", {
             email: existingUser.email,
-            newVerificationSecret,
+            credentialProvderSecret,
             serverSecret,
+            user: {
+                id: existingUser.id,
+                name: existingUser.name,
+                email: existingUser.email,
+                role: existingUser.role,
+                image: existingUser.image,
+                emailVerified: existingUser.emailVerified,
+                isTwoFactorEnabled: existingUser.isTwoFactorEnabled
+            },
             redirectTo: redirectPath,
         })
 

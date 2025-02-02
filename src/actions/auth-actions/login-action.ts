@@ -44,7 +44,13 @@ export const loginAction = async (values: z.infer<typeof LogInSchema>, userRole?
         return { success: "Verify your email. Please check your inbox for a verification link." };
     }
 
+    const credentialProvderSecret = process.env.CREDENTIAL_PROVIDER_SECRET;
     const serverSecret = process.env.SERVER_SECRET;
+
+    if (!credentialProvderSecret) {
+        return { error: "Passwordless secret is missing." };
+    }
+
     if (!serverSecret) {
         return { error: "Server secret is missing." };
     }
@@ -97,12 +103,23 @@ export const loginAction = async (values: z.infer<typeof LogInSchema>, userRole?
             email,
             password,
             serverSecret,
+            credentialProvderSecret,
+            user: JSON.stringify({
+                id: existingUser.id,
+                name: existingUser.name,
+                email: existingUser.email,
+                role: existingUser.role,
+                image: existingUser.image,
+                emailVerified: existingUser.emailVerified,
+                isTwoFactorEnabled: existingUser.isTwoFactorEnabled,
+            }),
             redirectTo: redirectPath,
         });
 
         return { success: "Successfully signed in!" };
     } catch (error: unknown) {
         if (error instanceof AuthError) {
+            console.log("Error type ---> ", error);
             switch (error.type) {
                 case "CredentialsSignin": return { error: "Invalid credentials!" };
                 default: return { error: "Something went wrong!" };

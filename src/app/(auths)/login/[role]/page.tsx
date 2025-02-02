@@ -11,7 +11,6 @@ export default async function Login({
 }: {
   params: Promise<{ role?: string }>;
 }) {
-  console.log("params---> ", params);
   const role = (await params)?.role;
   return <LoginForm role={role as string} />;
 }

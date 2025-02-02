@@ -1,8 +1,10 @@
-import { auth } from "@/auth";
+import authConfig from "./auth.config";
+import NextAuth from "next-auth";
 import { DEFAULT_LOGIN_REDIRECT, authRoutes, publicRoutes, HOME_ROUTE, apiAuthPrefix } from "@/routes"
 import { UserRole } from "@prisma/client";
 import { NextResponse } from "next/server";
 
+const { auth } = NextAuth(authConfig);
 
 //* Define which roles can access each dashboard path
 const DASHBOARD_PERMISSIONS: Record<string, UserRole[]> = {
@@ -37,6 +39,7 @@ export default auth(async (req) => {
     let pathname = req.nextUrl.pathname.toLowerCase();
     pathname = normalizePathname(pathname)
     const userRole = req.auth?.user?.role; // The role of the user (XVARIATE, FREELANCER, etc.) if they are logged in
+    console.log("User Role ---> ", userRole);
 
     // 1. Allow API auth routes and home page without checks
     if (pathname.startsWith(apiAuthPrefix)) return;
@@ -46,11 +49,15 @@ export default auth(async (req) => {
     const isPublicRoute = publicRoutes.some(route => pathname.startsWith(route));
     const isAuthRoute = authRoutes.some(route => pathname.startsWith(route));
 
+    console.log("Is Logged In Outside---> ", isLoggedIn);
+    console.log("Pathname Outside ---> ", pathname);
+    console.log("Is Public Route ---> ", isPublicRoute);
+
     // If it's an auth route (e.g. "/login") but user is already logged in,
     // send them to their default dashboard so they can't go back to login.
     if (isAuthRoute) {
         if (isLoggedIn) {
-            return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT(userRole as UserRole), nextUrl));
+            return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT("XVARIATE"), nextUrl));
         }
         // If not logged in, let them continue to login/signup
         return;
@@ -59,6 +66,8 @@ export default auth(async (req) => {
     // 3. If the user is NOT logged in and the route is NOT public,
     // force them to log in via the correct login page
     if (!isLoggedIn && !isPublicRoute) {
+        console.log("Is Logged In ---> ", isLoggedIn);
+        console.log("Pathname ---> ", pathname);
         let loginPath = '/login/client'; // default path if no match
 
         // Check if they tried to access a dashboard; if so, pick the right login
@@ -75,17 +84,17 @@ export default auth(async (req) => {
 
 
     // 4. If the user IS logged in, ensure they have the right role for certain dashboards
-    if (isLoggedIn) {
-        for (const [dashPath, allowedRoles] of Object.entries(DASHBOARD_PERMISSIONS)) {
-            // If they visit a path that starts with, say, "/xvariate",
-            // check if their role is in [UserRole.XVARIATE]
-            if (pathname.startsWith(dashPath)) {
-                if (!allowedRoles.includes(userRole!)) {
-                    return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT(userRole as UserRole), nextUrl));
-                }
-            }
-        }
-    }
+    // if (isLoggedIn) {
+    //     for (const [dashPath, allowedRoles] of Object.entries(DASHBOARD_PERMISSIONS)) {
+    //         // If they visit a path that starts with, say, "/xvariate",
+    //         // check if their role is in [UserRole.XVARIATE]
+    //         if (pathname.startsWith(dashPath)) {
+    //             if (!allowedRoles.includes(userRole!)) {
+    //                 return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT(userRole as UserRole), nextUrl));
+    //             }
+    //         }
+    //     }
+    // }
 
     // 5. If none of the above rules apply, just allow the user to proceed
     return;
