@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
+import {} from "@prisma/adapter-neon"
 import prisma from "@/prisma";
 import { cookies } from "next/headers";
 import { UserRole } from "@prisma/client";
