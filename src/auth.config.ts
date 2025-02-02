@@ -1,12 +1,12 @@
 import type { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
-import { getUserByEmail } from "./data/user";
-import bcrypt from "bcryptjs";
+// import { getUserByEmail } from "./data/user";
+// import bcrypt from "bcryptjs";
 import { LogInServerSchema, NewVerificationLoginSchema } from "./schemas";
-import { getUserById } from "./data/user";
-import { getAccountByUserId } from "./data/account";
-import { UserRole } from "@prisma/client";
+// import { getUserById } from "./data/user";
+// import { getAccountByUserId } from "./data/account";
+// import { UserRole } from "@prisma/client";
 
 export default {
     // callbacks: {
