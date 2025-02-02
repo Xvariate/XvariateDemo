@@ -1,18 +1,18 @@
 import authConfig from "./auth.config";
 import NextAuth from "next-auth";
 import { DEFAULT_LOGIN_REDIRECT, authRoutes, publicRoutes, HOME_ROUTE, apiAuthPrefix } from "@/routes"
-import { UserRole } from "@prisma/client";
+//import { UserRole } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 const { auth } = NextAuth(authConfig);
 
 //* Define which roles can access each dashboard path
-const DASHBOARD_PERMISSIONS: Record<string, UserRole[]> = {
-    "/xvariate": [UserRole.XVARIATE],
-    "/ambassador": [UserRole.AMBASSADOR],
-    "/client": [UserRole.CLIENT],
-    "/freelancer": [UserRole.FREELANCER],
-};
+// const DASHBOARD_PERMISSIONS: Record<string, UserRole[]> = {
+//     "/xvariate": [UserRole.XVARIATE],
+//     "/ambassador": [UserRole.AMBASSADOR],
+//     "/client": [UserRole.CLIENT],
+//     "/freelancer": [UserRole.FREELANCER],
+// };
 
 //* Map each dashboard path to the right login URL if user is not authenticated
 const PATH_TO_LOGIN_ROUTE: Record<string, string> = {
